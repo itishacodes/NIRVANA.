@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nirvana - Mental Health Chatbot</title>
+    <link rel="stylesheet" href="assist.css" />
+    <script defer src="assist.js"></script>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <header class="navbar">
+      <div class="logo-container">
+        <h1 class="site-name">Nirvana .</h1>
+      </div>
+      <nav class="nav-links">
+        <button class="home-button">Home</button>
+        <button id="dark-mode-toggle">🌙 Dark Mode</button>
+
+      </nav>
+    </header>
+
+    <!-- Background Graphics -->
+    <div class="background-graphics">
+      <div class="shape-1"></div>
+      <div class="shape-2"></div>
+      <div class="shape-3"></div>
+    </div>
+
+    <!-- Chat Section -->
+    <div class="chat-container">
+      <h2 class="chat-greeting">Hey, how are you feeling today? 😊</h2>
+
+      <!-- Emotion Buttons -->
+      <div class="emotion-buttons">
+        <button class="emotion happy">😊 Happy</button>
+        <button class="emotion sad">😔 Sad</button>
+        <button class="emotion anxious">😟 Anxious</button>
+        <button class="emotion stressed">😖 Stressed</button>
+        <button class="emotion calm">😌 Calm</button>
+      </div>
+
+      <!-- Chatbot Box -->
+      <div class="chat-box">
+        <div class="chat-header">Chat with Mitr</div>
+        <div class="chat-body"></div>
+        <div class="chat-footer">
+          <input
+            type="text"
+            id="user-input"
+            placeholder="Type your message..."
+          />
+          <button id="send-button">Send</button>
+        </div>
+        <div id="audio-suggestion"></div>
+        <!-- This is where audio suggestions will appear -->
+      </div>
+    </div>
+    </div>
+  </body>
+</html>
