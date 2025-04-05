@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talk Without Telling</title>
+    <style>
+        @keyframes floatText {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        header h1 {
+            animation: floatText 3s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d8ecff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #004b9b;
+            color: white;
+            padding: 15px;
+            font-size: 24px;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background: linear-gradient(to bottom, #b3e0ff, #ffffff);
+            border-radius: 10px;
+            padding: 20px;
+            width: 220px;
+            box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.08);
+            box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .card h2 {
+            color: #004080;
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        button {
+            background-color: #1073de;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #014d9f;
+        }
+
+        .chat-container {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: #007BFF;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            height: 250px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f8f9fa;
+            text-align: left;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .chat-input button {
+            margin-left: 5px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Be Anonymous</h1>
+    </header>
+    
+    <main>
+        <div class="container" id="user-container"></div>
+    </main>
+
+    <div class="chat-container" id="chatBox">
+        <div class="chat-header">
+            <span id="chatUser">Chat</span>
+            <button onclick="closeChat()">X</button>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        
+
+
+
+        const users = [
+            { name: "ShadowNinja", tags: ["gaming", " memes"], status: "Stealth mode: ON 🥷", level: "Cringe Level: 70%" },
+            { name: "CosmicToast", tags: ["astronomy", " coding"], status: "Burnt but still shining ☄️", level: "Meme Enthusiasm: 🚀🚀🚀" },
+            { name: "QuantumDuck", tags: ["physics", " painting"], status: "Waddling through dimensions 🦆", level: "Randomness: 90%" },
+            { name: "PixelPanda", tags: ["design", " art"], status: "Black, white & totally aesthetic 🎨", level: "Aesthetic Level: 🌈✨" },
+            { name: "NeonSloth", tags: ["chilling", " edm"], status: "Slow but glows! 🌈", level: "Vibe Check: ✅" },
+            { name: "EchoFalcon", tags: ["adventure", " photography"], status: "Soaring through snapshots 📸", level: "Thrill Factor: 💯" },
+            { name: "CyberOwl", tags: ["hacking", " ai"], status: "Flying under the radar 🦉", level: "Stealth Mode: 99%" },
+            { name: "ByteMuffin", tags: ["food", " coding"], status: "Sweet but runs on C++ 🍪", level: "Quirkiness: 88%" },
+            { name: "SolarGiraffe", tags: ["astronomy", " music"], status: "Reaching for the stars 🌍🦒", level: "Height: 🚀🚀🚀" },
+            { name: "FunkyCactus", tags: ["history", " sports"], status: "Spiky but groovy 🌵🎵", level: "Mood: Vibing 🎶" },
+            ...Array.from({ length: 20 }, (_, i) => ({
+                name: `User${i + 1}`,
+                tags: ["coding", "music", "gaming", "adventure"][Math.floor(Math.random() * 4)],
+                status: "Living life at full volume! 🎧",
+                level: "Awesomeness: 100%"
+            }))
+        ];
+
+        function createUserCard(user) {
+            const profileImage = `https://robohash.org/${user.name}?size=80x80&set=set${Math.floor(Math.random() * 5)}`;
+            return `
+                <div class="card">
+                    <img src="${profileImage}" alt="${user.name}">
+                    <h2>${user.name}</h2>
+                    <span class="tag">${user.tags}</span>
+                    <p>${user.status}</p>
+                    <p>${user.level}</p>
+                    <button onclick="chatWith('${user.name}')">Chat</button>
+                </div>
+            `;
+        }
+
+        document.getElementById("user-container").innerHTML = users.map(createUserCard).join('');
+
+        let currentChatUser = "";
+
+        function chatWith(userName) {
+            currentChatUser = userName;
+            document.getElementById("chatUser").innerText = `Chat with ${userName}`;
+            document.getElementById("chatBox").style.display = "block";
+            document.getElementById("chatMessages").innerHTML = `<p><i>Start chatting with ${userName}...</i></p>`;
+        }
+
+        function closeChat() {
+            document.getElementById("chatBox").style.display = "none";
+        }
+
+
+        function sendMessage() {
+            const messageInput = document.getElementById("messageInput");
+            const messageText = messageInput.value.trim();
+            
+            if (messageText === "") return;
+
+            const chatMessages = document.getElementById("chatMessages");
+            chatMessages.innerHTML += `<p><b>You:</b> ${messageText}</p>`;
+
+            setTimeout(() => {
+                chatMessages.innerHTML += `<p><b>Bot:</b> I'm just a bot, but I'm here to chat! 😊</p>`;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000);
+
+            messageInput.value = "";
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>
